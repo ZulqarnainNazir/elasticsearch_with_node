@@ -1,4 +1,11 @@
-const con = require("./db_connection");
+// const con = require("./db_connection");
+const elasticsearch = require('elasticsearch');
+
+const esClient = new elasticsearch.Client({
+  host: 'https://1ea0a33b3281455ea231f1936d5bcb45.eastus2.azure.elastic-cloud.com:9243',
+  log: 'error'
+});
+
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const ALOG = "AES-256-CBC";
@@ -37,16 +44,25 @@ class Utility {
     }
 
     Database(query, data) {
-        return new Promise((resolve, reject) => {
-            // return resolve(query);
-            con.query(query, data, (err, results) => {
-                if (err) {
-                    return reject(err);
-                } else {
-                    return resolve(results);
-                }
-            });
-        });
+        // Insert in ES
+        switch (query) {
+          case "insertUser":
+            return this.insertUser(data);
+          default:
+            return Promise.reject(
+              utility.Response("user", "warning", "Action not found")
+            );
+        }
+        // return new Promise((resolve, reject) => {
+        //     // return resolve(query);
+        //     con.query(query, data, (err, results) => {
+        //         if (err) {
+        //             return reject(err);
+        //         } else {
+        //             return resolve(results);
+        //         }
+        //     });
+        // });
     }
 
     encrypt(data) {
@@ -123,6 +139,10 @@ class Utility {
         } else {
             return false;
         }
+    }
+
+    insertUser(data){
+        console.log(data);
     }
 
     validatePwd(str) {

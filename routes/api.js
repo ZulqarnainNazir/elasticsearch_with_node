@@ -1,7 +1,7 @@
 const express = require("express");
 const bparser = require("body-parser");
 const utility = require("../models/utility");
-const user = require("../models/user");
+// const user = require("../models/user");
 
 let router = express.Router();
 const jwt = require("jsonwebtoken");
@@ -21,7 +21,6 @@ router.use(
 
 router.all("/:method/:action", (req, res) => {
     let session = req.session;
-    // console.log(session);
     let access = true; //check auth intentionally left true for test
     let method = req.params.method;
     let action = req.params.action;
@@ -33,8 +32,8 @@ router.all("/:method/:action", (req, res) => {
     };
     if (access) {
         if (method === "user") {
-            let user = require("../models/user");
-            let u = new user(action, body);
+            let User = require("../models/user");
+            let u = new User(action, body);
             u.output()
                 .then((reply) => {
                     res.send(reply);

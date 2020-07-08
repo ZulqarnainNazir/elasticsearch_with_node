@@ -1,13 +1,12 @@
 const express = require("express");
 
 const app = express();
-let router = require("./router");
+// let router = require("./router");
 let apiRouter = require("./routes/api");
 
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
-
 const env = app.get("env");
 let secret = "vEvaRC2HEnYwFB5FybCUF9Zxmg42z6G7Bw2W";
 if (env === "production") {

@@ -10,13 +10,28 @@ class User {
 
   output() {
     switch (this.action) {
-      case "api-test":
+      case "test":
         return this.register();      
+      case "signup":
+        return this.signup();
       default:
         return Promise.reject(
           utility.Response("user", "warning", "Action not found")
         );
     }
+  }
+
+  signup() {
+    let msg = "";
+    utility.Database("insertUser",this.data.payload)
+    return Promise.reject(
+        utility.Response(
+          "error",
+          "user",
+          0,
+          msg
+        )
+      );
   }
 
   register() {
@@ -29,7 +44,6 @@ class User {
         )
       );
   }
-
 }
 
 module.exports = User;
