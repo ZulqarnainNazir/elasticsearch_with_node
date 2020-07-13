@@ -13,25 +13,16 @@ class User {
       case "test":
         return this.register();      
       case "signup":
-        return this.signup();
+        return utility.Database("insertUser",this.data.payload);
+      case "update":
+        return utility.Database("update",this.data.payload);
+      case "filter":
+        return utility.Database("filter",this.data.payload);
       default:
         return Promise.reject(
           utility.Response("user", "warning", "Action not found")
         );
     }
-  }
-
-  signup() {
-    let msg = "";
-    utility.Database("insertUser",this.data.payload)
-    return Promise.reject(
-        utility.Response(
-          "error",
-          "user",
-          0,
-          msg
-        )
-      );
   }
 
   register() {
