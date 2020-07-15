@@ -45,10 +45,9 @@ class Utility {
           case "insertUser":
             var errors = await this.validateRequireFields(data);
             if(errors.length === 0)
-                console.log("shi aya");
+                await this.insertUser(data);
             else 
               return Promise.reject( this.Response("user", "error", "Fields require", errors) );
-                // await this.insertUser(data);
           case "update":
             await this.updateUser(data);
           case "filter":
@@ -61,6 +60,7 @@ class Utility {
     }
     validateRequireFields(data){
         var fields = ["email","first_name","last_name","dob","nationality","phone","location","last_or_current_employer","last_or_current_pos","level_of_education","still_in_school"]
+        var shool_fields = ["school_name","graducation","special_field","start_year","end_year"]
         const errors = [];
         fields.forEach(function(entry) {
             if (!String(data[entry]).trim()) {
@@ -72,6 +72,13 @@ class Utility {
         }
         if(String(data["dob"]).trim() && !this.isValidDate(data.dob)){
             errors.push('Invalid dob format it should be yyyy-mm-dd');    
+        }
+        if(data["still_in_school"] == true){
+           shool_fields.forEach(function(entry) {
+            if (!String(data[entry]).trim()) {
+                errors.push(entry + ' is required');
+            }
+        });    
         }
         return errors;
     }
@@ -165,6 +172,8 @@ class Utility {
         await client.search({ index: 'users', type: 'personal',
           body: await user_query.filterQuery(data)}).then((result, err) => {
           if (err) console.log(err)
+            console.log("result")
+            console.log(result.hits.hits)
           return Promise.reject({type: "success", action: "user", status: 200, response: "", data: result.hits.hits});
         })
     }

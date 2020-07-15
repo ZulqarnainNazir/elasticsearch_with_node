@@ -25,6 +25,8 @@ class UserHelper {
             builder["query"]["bool"]["must"].push({"match": { "looking_for_job_type": data.filter.job_type } })
         if(data.filter.location)
             builder["query"]["bool"]["must"].push({"match": { "city": data.filter.location } })
+        if(data.filter.job_city)
+            builder["query"]["bool"]["must"].push({"match": { "job_city": data.filter.job_city } })
         if(data.filter.experience_from || data.filter.experience_to){
             var obj = {}
             obj["range"] = {}
